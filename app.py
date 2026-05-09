@@ -1,6 +1,15 @@
 import streamlit as st
+import google.generativeai as genai
 
-st.set_page_config(page_title="DRG.ai")
+genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 
-st.title("DRG AI test")
-st.write("Ak toto vidíš, GitHub + Streamlit fungujú.")
+model = genai.GenerativeModel("gemini-1.5-pro")
+
+st.title("DRG AI")
+
+text = st.text_area("Vlož epikrízu / operačný protokol / otázku")
+
+if st.button("Analyzovať"):
+    with st.spinner("Analyzujem..."):
+        response = model.generate_content(text)
+        st.write(response.text)
